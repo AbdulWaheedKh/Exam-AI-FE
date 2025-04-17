@@ -1,0 +1,80 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <h2>Edit Your Profile</h2>
+    
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <!-- Success Message -->
+      <div class="success-message" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+      
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+      
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input 
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Enter your full name"
+        >
+        <div class="error" *ngIf="profileForm.get('name')?.errors?.['required'] && profileForm.get('name')?.touched">
+          Name is required
+        </div>
+        <div class="error" *ngIf="profileForm.get('name')?.errors?.['minlength'] && profileForm.get('name')?.touched">
+          Name must be at least 2 characters
+        </div>
+      </div>
+      
+      <!-- Email (read-only) -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Your email"
+          readonly
+        >
+        <div class="hint">Email cannot be changed</div>
+      </div>
+      
+      <!-- Grade (only for students) -->
+      <div class="form-group" *ngIf="user?.role === 'student'">
+        <label for="grade">Grade</label>
+        <input 
+          id="grade"
+          type="number"
+          formControlName="grade"
+          min="1"
+          max="12"
+          placeholder="Enter your grade (1-12)"
+        >
+        <div class="error" *ngIf="profileForm.get('grade')?.errors?.['required'] && profileForm.get('grade')?.touched">
+          Grade is required for students
+        </div>
+        <div class="error" *ngIf="profileForm.get('grade')?.errors?.['min'] || profileForm.get('grade')?.errors?.['max']">
+          Grade must be between 1 and 12
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="!profileForm.valid || isLoading"
+      >
+        <span *ngIf="!isLoading">Update Profile</span>
+        <span *ngIf="isLoading">Updating...</span>
+      </button>
+      
+      <!-- Back to Dashboard Link -->
+      <div class="back-link">
+        <a routerLink="/dashboard">Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+</div> 

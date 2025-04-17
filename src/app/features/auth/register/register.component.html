@@ -1,0 +1,123 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Create Account</h2>
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input 
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Enter your full name"
+        >
+        <div class="error" *ngIf="registerForm.get('name')?.errors?.['required'] && registerForm.get('name')?.touched">
+          Name is required
+        </div>
+        <div class="error" *ngIf="registerForm.get('name')?.errors?.['minlength'] && registerForm.get('name')?.touched">
+          Name must be at least 2 characters
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        >
+        <div class="error" *ngIf="registerForm.get('email')?.errors?.['required'] && registerForm.get('email')?.touched">
+          Email is required
+        </div>
+        <div class="error" *ngIf="registerForm.get('email')?.errors?.['email'] && registerForm.get('email')?.touched">
+          Please enter a valid email
+        </div>
+      </div>
+
+      <!-- Role -->
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" formControlName="role">
+          <option *ngFor="let role of userRoles" [value]="role">
+            {{role | titlecase}}
+          </option>
+        </select>
+      </div>
+
+      <!-- Grade (Only for students) -->
+      <div class="form-group" *ngIf="registerForm.get('role')?.value === 'student'">
+        <label for="grade">Grade</label>
+        <input 
+          id="grade"
+          type="number"
+          formControlName="grade"
+          min="1"
+          max="12"
+          placeholder="Enter your grade (1-12)"
+        >
+        <div class="error" *ngIf="registerForm.get('grade')?.errors?.['required'] && registerForm.get('grade')?.touched">
+          Grade is required for students
+        </div>
+        <div class="error" *ngIf="registerForm.get('grade')?.errors?.['min'] || registerForm.get('grade')?.errors?.['max']">
+          Grade must be between 1 and 12
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        >
+        <div class="error" *ngIf="registerForm.get('password')?.errors?.['required'] && registerForm.get('password')?.touched">
+          Password is required
+        </div>
+        <div class="error" *ngIf="registerForm.get('password')?.errors?.['minlength'] && registerForm.get('password')?.touched">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input 
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Confirm your password"
+        >
+        <div class="error" *ngIf="registerForm.get('confirmPassword')?.errors?.['required'] && registerForm.get('confirmPassword')?.touched">
+          Please confirm your password
+        </div>
+        <div class="error" *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched">
+          Passwords do not match
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        [disabled]="!registerForm.valid || isLoading"
+      >
+        <span *ngIf="!isLoading">Create Account</span>
+        <span *ngIf="isLoading">Creating Account...</span>
+      </button>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        Already have an account? <a routerLink="/auth/login">Login here</a>
+      </div>
+    </form>
+  </div>
+</div> 

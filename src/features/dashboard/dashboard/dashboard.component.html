@@ -1,0 +1,78 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened class="sidenav">
+    <div class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ user?.username }}</span>
+    </div>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+
+      <ng-container *ngIf="isTeacher">
+        <a mat-list-item routerLink="/exams/create" routerLinkActive="active">
+          <mat-icon matListItemIcon>add_circle</mat-icon>
+          <span matListItemTitle>Create Exam</span>
+        </a>
+        <a mat-list-item routerLink="/exams/manage" routerLinkActive="active">
+          <mat-icon matListItemIcon>edit</mat-icon>
+          <span matListItemTitle>Manage Exams</span>
+        </a>
+        <a mat-list-item routerLink="/exams/results" routerLinkActive="active">
+          <mat-icon matListItemIcon>assessment</mat-icon>
+          <span matListItemTitle>Exam Results</span>
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="isStudent">
+        <a mat-list-item routerLink="/exams/available" routerLinkActive="active">
+          <mat-icon matListItemIcon>list</mat-icon>
+          <span matListItemTitle>Available Exams</span>
+        </a>
+        <a mat-list-item routerLink="/exams/my-results" routerLinkActive="active">
+          <mat-icon matListItemIcon>grade</mat-icon>
+          <span matListItemTitle>My Results</span>
+        </a>
+      </ng-container>
+
+      <a mat-list-item routerLink="/profile" routerLinkActive="active">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>Profile</span>
+      </a>
+
+      <a mat-list-item (click)="logout()">
+        <mat-icon matListItemIcon>exit_to_app</mat-icon>
+        <span matListItemTitle>Logout</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Exam AI Platform</span>
+      <span class="toolbar-spacer"></span>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container> 
