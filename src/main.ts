@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/features/dashboard/dashboard.component';
 import { ProfileComponent } from './app/features/profile/profile.component';
+import { PdfUploadComponent } from './app/components/pdf-upload/pdf-upload.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent
+  },
+  {
+    path: 'pdf-upload',
+    component: PdfUploadComponent
   }
 ];
 

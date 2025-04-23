@@ -1,0 +1,35 @@
+<div class="upload-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Upload PDF</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter PDF title">
+          <mat-error *ngIf="uploadForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="file-upload">
+          <input type="file" (change)="onFileSelected($event)" accept=".pdf" #fileInput style="display: none">
+          <button mat-raised-button type="button" (click)="fileInput.click()">
+            <mat-icon>upload_file</mat-icon>
+            Select PDF
+          </button>
+          <span class="file-name" *ngIf="selectedFile">
+            {{ selectedFile.name }}
+          </span>
+        </div>
+
+        <div class="submit-button">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!uploadForm.valid">
+            Upload
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> 

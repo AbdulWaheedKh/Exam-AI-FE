@@ -21,6 +21,10 @@ export class AuthService {
     }
   }
 
+  getCurrentUser(): UserProfile | null {
+    return this.currentUserSubject.value;
+  }
+
   login(credentials: LoginRequest): Observable<any> {
     return this.http.post<any>(`${this.API_URL}/auth/login`, credentials)
       .pipe(

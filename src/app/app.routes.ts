@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PdfUploadComponent } from './components/pdf-upload/pdf-upload.component';
 
 export const routes: Routes = [
   {
@@ -21,5 +22,9 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadChildren: () => import('./features/profile/profile.module').then(m => m.ProfileModule)
+  },
+  {
+    path: 'pdf-upload',
+    component: PdfUploadComponent
   }
 ]; 
