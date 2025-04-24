@@ -1,35 +1,81 @@
-<div class="upload-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Upload PDF</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Title</mat-label>
-          <input matInput formControlName="title" placeholder="Enter PDF title">
-          <mat-error *ngIf="uploadForm.get('title')?.hasError('required')">
-            Title is required
-          </mat-error>
-        </mat-form-field>
+<div class="page-container">
+  <!-- Upload Form Section -->
+  <div class="upload-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Upload PDF</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" placeholder="Enter PDF title">
+            <mat-error *ngIf="uploadForm.get('title')?.hasError('required')">
+              Title is required
+            </mat-error>
+          </mat-form-field>
 
-        <div class="file-upload">
-          <input type="file" (change)="onFileSelected($event)" accept=".pdf" #fileInput style="display: none">
-          <button mat-raised-button type="button" (click)="fileInput.click()">
-            <mat-icon>upload_file</mat-icon>
-            Select PDF
-          </button>
-          <span class="file-name" *ngIf="selectedFile">
-            {{ selectedFile.name }}
-          </span>
-        </div>
+          <div class="file-upload">
+            <input type="file" (change)="onFileSelected($event)" accept=".pdf" #fileInput style="display: none">
+            <button mat-raised-button type="button" (click)="fileInput.click()">
+              <mat-icon>upload_file</mat-icon>
+              Select PDF
+            </button>
+            <span class="file-name" *ngIf="selectedFile">
+              {{ selectedFile.name }}
+            </span>
+          </div>
 
-        <div class="submit-button">
-          <button mat-raised-button color="primary" type="submit" [disabled]="!uploadForm.valid">
-            Upload
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+          <div class="submit-button">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!uploadForm.valid">
+              Upload
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- PDF List Section -->
+  <div class="list-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Uploaded PDFs</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table mat-table [dataSource]="pdfFiles" class="full-width">
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let file">{{file.title}}</td>
+          </ng-container>
+
+          <!-- Original Filename Column -->
+          <ng-container matColumnDef="originalFileName">
+            <th mat-header-cell *matHeaderCellDef>File Name</th>
+            <td mat-cell *matCellDef="let file">{{file.originalFileName}}</td>
+          </ng-container>
+
+          <!-- Created At Column -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Upload Date</th>
+            <td mat-cell *matCellDef="let file">{{formatDate(file.createdAt)}}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let file">
+              <button mat-icon-button color="warn" (click)="deletePdf(file.id)" title="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div> 

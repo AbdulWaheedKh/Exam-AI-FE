@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { PdfService } from '../../services/pdf.service';
+import { PdfService, PdfFile } from '../../services/pdf.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -23,12 +24,15 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule
   ]
 })
-export class PdfUploadComponent {
+export class PdfUploadComponent implements OnInit {
   uploadForm: FormGroup;
   selectedFile: File | null = null;
+  pdfFiles: PdfFile[] = [];
+  displayedColumns: string[] = ['title', 'originalFileName', 'createdAt', 'actions'];
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +43,24 @@ export class PdfUploadComponent {
     this.uploadForm = this.fb.group({
       title: ['', Validators.required],
       file: [null, Validators.required]
+    });
+  }
+
+  ngOnInit() {
+    this.loadPdfFiles();
+  }
+
+  loadPdfFiles() {
+    this.pdfService.getAllPdfs().subscribe({
+      next: (files) => {
+        this.pdfFiles = files;
+      },
+      error: (error) => {
+        console.error('Error loading PDF files:', error);
+        this.snackBar.open('Failed to load PDF files', 'Close', {
+          duration: 3000
+        });
+      }
     });
   }
 
@@ -63,21 +85,10 @@ export class PdfUploadComponent {
           console.log('Upload successful, response:', response);
           this.uploadForm.reset();
           this.selectedFile = null;
-          
-          // Try different navigation methods
-          try {
-            console.log('Attempting navigation to dashboard...');
-            this.router.navigate(['/dashboard']).then(success => {
-              console.log('Navigation result:', success);
-              if (!success) {
-                console.log('Navigation failed, trying alternative method...');
-                window.location.href = '/dashboard';
-              }
-            });
-          } catch (error) {
-            console.error('Navigation error:', error);
-            window.location.href = '/dashboard';
-          }
+          this.loadPdfFiles(); // Refresh the list
+          this.snackBar.open('PDF uploaded successfully', 'Close', {
+            duration: 3000
+          });
         },
         error: (error) => {
           console.error('Upload error:', error);
@@ -87,5 +98,26 @@ export class PdfUploadComponent {
         }
       });
     }
+  }
+
+  deletePdf(id: string) {
+    this.pdfService.deletePdf(id).subscribe({
+      next: () => {
+        this.loadPdfFiles(); // Refresh the list
+        this.snackBar.open('PDF deleted successfully', 'Close', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        console.error('Delete error:', error);
+        this.snackBar.open('Failed to delete PDF', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  formatDate(date: Date): string {
+    return new Date(date).toLocaleDateString();
   }
 }

@@ -3,6 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../features/auth/services/auth.service';
 
+export interface PdfFile {
+  id: string;
+  title: string;
+  originalFileName: string;
+  createdAt: Date;
+  userId: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,4 +30,12 @@ export class PdfService {
 
     return this.http.post(`${this.apiUrl}/pdf-raw/upload`, formData);
   }
-} 
+
+  getAllPdfs(): Observable<PdfFile[]> {
+    return this.http.get<PdfFile[]>(`${this.apiUrl}/pdf-raw`);
+  }
+
+  deletePdf(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/pdf-raw/${id}`);
+  }
+}

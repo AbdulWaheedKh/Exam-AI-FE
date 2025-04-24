@@ -64,7 +64,7 @@
   main {
     width: 100%;
     min-height: 100%;
-    display: flex;
+    /*display: flex;*/
     justify-content: center;
     align-items: center;
     padding: 1rem;
@@ -181,7 +181,7 @@
   <div class="navbar-brand">
     <a routerLink="/">Exam AI</a>
     </div>
-  
+
   <div class="nav-links">
     <div *ngIf="!authService.isLoggedIn()">
       <a routerLink="/auth/login" routerLinkActive="active" class="nav-button">Login</a>
