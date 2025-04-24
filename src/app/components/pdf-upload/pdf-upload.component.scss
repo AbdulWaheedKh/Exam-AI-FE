@@ -59,3 +59,20 @@ table {
     width: 100%;
   }
 }
+
+
+.action-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  button {
+    font-size: 12px;
+    padding: 0.3rem 0.6rem;
+    white-space: nowrap;
+  }
+
+  mat-icon {
+    font-size: 18px;
+  }
+}

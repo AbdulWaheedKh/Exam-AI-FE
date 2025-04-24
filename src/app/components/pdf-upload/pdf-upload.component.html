@@ -63,14 +63,24 @@
           </ng-container>
 
           <!-- Actions Column -->
+          <!-- Actions Column -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let file">
-              <button mat-icon-button color="warn" (click)="deletePdf(file.id)" title="Delete">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <div class="action-list">
+                <button mat-stroked-button color="primary" (click)="generatePdf(file._id)">
+                  Generate
+                </button>
+                <button mat-stroked-button color="accent" (click)="quizPdf(file._id)">
+                  Quiz
+                </button>
+                <button mat-icon-button color="warn" (click)="deletePdf(file._id)" title="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </td>
           </ng-container>
+
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -78,4 +88,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-</div> 
+</div>

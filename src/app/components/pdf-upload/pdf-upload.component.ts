@@ -79,7 +79,7 @@ export class PdfUploadComponent implements OnInit {
   onSubmit(): void {
     if (this.uploadForm.valid && this.selectedFile) {
       const title = this.uploadForm.get('title')?.value;
-      
+
       this.pdfService.uploadPdf(this.selectedFile, title).subscribe({
         next: (response) => {
           console.log('Upload successful, response:', response);
@@ -116,6 +116,17 @@ export class PdfUploadComponent implements OnInit {
       }
     });
   }
+
+  generatePdf(id: string | undefined): void {
+    if (!id) return;
+    console.log('Generate PDF for ID:', id);
+  }
+
+  quizPdf(id: string | undefined): void {
+    if (!id) return;
+    console.log('Generate Quiz for ID:', id);
+  }
+
 
   formatDate(date: Date): string {
     return new Date(date).toLocaleDateString();
