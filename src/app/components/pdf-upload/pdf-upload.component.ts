@@ -120,6 +120,20 @@ export class PdfUploadComponent implements OnInit {
   generatePdf(id: string | undefined): void {
     if (!id) return;
     console.log('Generate PDF for ID:', id);
+    this.pdfService.generatePdfQuiz(id).subscribe({
+      next: () => {
+        this.loadPdfFiles(); // Refresh the list
+        this.snackBar.open('PDF deleted successfully', 'Close', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        console.error('Delete error:', error);
+        this.snackBar.open('Failed to delete PDF', 'Close', {
+          duration: 3000
+        });
+      }
+    });
   }
 
   quizPdf(id: string | undefined): void {

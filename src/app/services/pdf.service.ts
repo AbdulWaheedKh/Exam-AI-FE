@@ -49,4 +49,20 @@ export class PdfService {
   deletePdf(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/pdf-raw/${id}`);
   }
+
+  generatePdfQuiz(id: string): Observable<any> {
+    // Step 1: Get the user object from localStorage
+    const userString = localStorage.getItem('user');
+
+    // Step 2: Parse it to JSON
+    const user = userString ? JSON.parse(userString) : null;
+
+    // Step 3: Extract the id
+    const userId = user?.id || '';
+
+    console.log("Logged-In userID",userId);
+
+    return this.http.get(`${this.apiUrl}/pdf-raw/${id}/userId/${userId}`);
+    // return this.http.get(`${this.apiUrl}/pdf-quiz/${id}/userId/${userId}`);
+  }
 }
