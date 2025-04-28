@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LoginRequest, RegisterRequest, AuthResponse, UserProfile } from '../models/auth.model';
 import { environment } from '../../../../environments/environment';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,13 @@ import { environment } from '../../../../environments/environment';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  
+
   private readonly API_URL = `${environment.apiUrl}/api`;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
     // Check if user is already logged in
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
@@ -43,6 +47,7 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
+    this.router.navigate(['/auth/login']);
   }
 
   isLoggedIn(): boolean {
@@ -58,12 +63,12 @@ export class AuthService {
   }
 
   private handleAuthResponse(response: any): void {
-    console.log(response);
+    // console.log("response -> ",response);
     // Handle the nested response format
-    if (response.data) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      this.currentUserSubject.next(response.data.user);
+    if (response) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      this.currentUserSubject.next(response.user);
     } else {
       // Fallback to the original format
       localStorage.setItem('token', response.accessToken);
@@ -71,4 +76,4 @@ export class AuthService {
       this.currentUserSubject.next(response.user);
     }
   }
-} 
+}

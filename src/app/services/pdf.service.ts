@@ -32,7 +32,18 @@ export class PdfService {
   }
 
   getAllPdfs(): Observable<PdfFile[]> {
-    return this.http.get<PdfFile[]>(`${this.apiUrl}/pdf-raw`);
+    // Step 1: Get the user object from localStorage
+    const userString = localStorage.getItem('user');
+
+    // Step 2: Parse it to JSON
+    const user = userString ? JSON.parse(userString) : null;
+
+    // Step 3: Extract the id
+    const userId = user?.id || '';
+
+    console.log(userId);
+
+    return this.http.get<PdfFile[]>(`${this.apiUrl}/pdf-raw/${userId}`);
   }
 
   deletePdf(id: string): Observable<any> {

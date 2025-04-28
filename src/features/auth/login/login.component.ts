@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
       this.isLoading = true;
       this.apiService.login(this.loginForm.value).subscribe({
         next: (response) => {
+          console.log(response);
           this.apiService.setToken(response.token);
           this.router.navigate(['/dashboard']);
         },
@@ -48,4 +49,4 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-} 
+}
